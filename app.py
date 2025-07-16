@@ -6,6 +6,7 @@ import os
 
 # for cloud ..............
 os.environ['GROQ_API_KEY'] = os.getenv("groq")
+TELEGRAM_BOT_TOKEN = os.getenv("telegram")
 
 app = Flask(__name__)
 
@@ -117,7 +118,7 @@ def webhook():
         response_message = completion_ds.choices[0].message.content
 
         # Send the response back to the Telegram chat
-        send_message_url = f"https://api.telegram.org/bot{telegram}/sendMessage"
+        send_message_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
         requests.post(send_message_url, json={
             "chat_id": chat_id,
             "text": response_message
