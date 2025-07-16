@@ -5,8 +5,8 @@ import requests
 import os
 
 # for cloud ..............
-os.environ['GROQ_API_KEY'] = os.getenv("groq")
-os.environ["TELEGRAM_BOT_TOKEN"] = os.getenv("telegram")
+GROQ_API_KEY = os.getenv("groq")
+TELEGRAM_BOT_TOKEN = os.getenv("telegram")
 
 app = Flask(__name__)
 
