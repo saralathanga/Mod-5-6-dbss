@@ -141,5 +141,35 @@ def webhook():
         })
     return('ok', 200)
 
+@app.route("/user_log",methods=["GET","POST"])
+def user_log():
+    #read
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute("select * from users")
+    r=""
+    for row in c:
+        print(row)
+        r= r+str(row)
+    c.close()
+    conn.close()
+    return(render_template("user_log.html",r=r))
+
+@app.route("/delete_log",methods=["GET","POST"])
+def delete_log():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute("delete from users")
+    conn.commit()
+    c.close()
+    conn.close()
+    return(render_template("delete_log.html"))
+
+@app.route("/logout",methods=["GET","POST"])
+def logout():
+    global first_time
+    first_time = 1
+    return(render_template("index.html"))
+
 if __name__ == "__main__":
     app.run()
