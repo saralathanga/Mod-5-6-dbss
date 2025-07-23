@@ -2,7 +2,10 @@ from flask import Flask, render_template, request
 import joblib
 from groq import Groq
 import requests
+
 import os
+import sqlite3
+import datetime
 
 # for cloud ..............
 os.environ['GROQ_API_KEY'] = os.getenv("groq")
@@ -143,33 +146,25 @@ def webhook():
 
 @app.route("/user_log",methods=["GET","POST"])
 def user_log():
-    #read
     conn = sqlite3.connect('user.db')
     c = conn.cursor()
-    c.execute("select * from users")
+    c.execute('''select * from user''')
     r=""
     for row in c:
-        print(row)
-        r= r+str(row)
+      print(row)
+      r = r + str(row)
     c.close()
     conn.close()
-    return(render_template("user_log.html",r=r))
+    return render_template("user_log.html", r=r)
 
 @app.route("/delete_log",methods=["GET","POST"])
 def delete_log():
     conn = sqlite3.connect('user.db')
-    c = conn.cursor()
-    c.execute("delete from users")
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM user')
     conn.commit()
-    c.close()
     conn.close()
-    return(render_template("delete_log.html"))
-
-@app.route("/logout",methods=["GET","POST"])
-def logout():
-    global first_time
-    first_time = 1
-    return(render_template("index.html"))
+    return render_template("delete_log.html", message="User log deleted successfully.")
 
 if __name__ == "__main__":
     app.run()
