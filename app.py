@@ -144,6 +144,21 @@ def webhook():
         })
     return('ok', 200)
 
+@app.route("/log_user",methods=["GET","POST"])
+def log_user():
+    txtName = request.form.get("q")
+    txtTimestamp = datetime.datetime.now()
+
+    #create_user
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO user (name,timestamp) VALUES(?,?)',(txtName,txtTimestamp))
+    conn.commit()
+    c.close()
+    conn.close()
+
+    return(render_template("main.html"))
+
 @app.route("/user_log",methods=["GET","POST"])
 def user_log():
     conn = sqlite3.connect('user.db')
